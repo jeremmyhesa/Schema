@@ -1,0 +1,44 @@
+.form {
+    padding: 50px;
+}
+.form .col-form-label {
+    color: white;
+    margin-left: 150px;
+}
+
+.form-text {
+    width: 500px !important;
+    margin-top: 19px !important;
+    margin-left: 150px;
+}
+.baris2 {
+    margin-top: -80px !important;
+
+}
+.form-text2 {
+    width: 500px !important;
+    margin-left: 52px;
+}
+
+.baris3 {
+    margin-top: -80px !important;
+
+}
+.form-text3{
+    width: 500px !important;
+    margin-left: 142px;
+}
+
+.baris4 {
+    margin-top: -80px !important;
+}
+.form-text4{
+    width: 500px !important;
+    margin-left: 114px;
+}
+
+.tombol {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: 530px;
+}

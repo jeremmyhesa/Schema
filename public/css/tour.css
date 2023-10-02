@@ -1,0 +1,103 @@
+.navbar {
+    position: relative;
+}
+.navbar-brand {
+    font-family: Viga;
+    font-size: 32px;
+}
+.navbar-brand,
+.nav-link {
+    color: white !important;
+}
+.dropdown {
+    margin-left: 60px;
+    margin-right: -90px;
+}
+
+/* Jumbotron */
+.jumbotron {
+    margin-top: -5px;
+    background-image: url("/img/beck.jpg");
+    background-size: cover;
+    z-index: 1;
+}
+.jumbotron h1 {
+    color: gray;
+}
+.info h5 {
+    color: gray;
+}
+.info img {
+    width: 20px;
+    padding:0;
+    margin-left: -150px;
+    margin-top: -5px;
+}
+.user img {
+    margin-left: 0;
+}
+.joystick img {
+    width: 27px;
+}
+
+.item .link2 {
+    color: white !important;
+    font-family: Viga;
+    font-size: 20px;
+    padding: 0;
+    margin-bottom: -50px ;
+}
+
+.navbar2 {
+    margin-top: -28px;
+}
+.navdown, .link2 {
+    padding: 0;
+    margin-left: 105px;
+}
+.link2:hover::after {
+    content: "";
+    display: block;
+    border-bottom: 3px solid #0b63dc;
+    width: 50%;
+    margin: auto;
+    padding-bottom: 5px;
+    margin-bottom: -8px;
+}
+/* Card */
+.card {
+    margin-left: 128px;
+    background-color: grey !important;
+}
+.card , p {
+color: white !important;
+}
+
+
+/* End Card */
+/* Table */
+.table {
+    margin-top: 30px;
+    margin-left: 128px;
+    width: 500px !important;
+}
+.table, td {
+    color: white;
+}
+/* End Table */
+
+/* Form Tournament add */
+.addForm {
+    margin-top: 50px;
+
+}
+
+.form-control {
+    width: 500px !important;
+    margin-left: 128px;
+}
+
+.addButton {
+    margin-top: 10px;
+    margin-left: 128px;
+}
