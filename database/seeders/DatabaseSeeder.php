@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Jeremmy Hesa',
                 'username' => 'jeremmyhs',
                 'email' => 'jeremmyhesa10@gmail.com',
+                'is_admin'=> '1',
                 'password' => bcrypt('admin123')
             ]);
             
@@ -47,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'slug' => 'valorant'
         ]);
 
-        Tournament::factory(30)->create();
+        Tournament::factory(10)->create();
 
         // Tournament::create([
         //     'title' => 'Piala Presiden',

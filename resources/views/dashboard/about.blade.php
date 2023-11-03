@@ -19,17 +19,17 @@
   {{-- navbar --}}
   <nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="home">Schema</a>
+      <a class="navbar-brand text-white" href="home">Schema</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="nav">
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link active" aria-current="page" href="/">Home</a>
-          <a class="nav-item nav-link" href="about">About</a>
-          <a class="nav-item nav-link" href="auth/login">Sign In</a>
-          <a class="nav-item btn btn-primary tombol" href="auth/register">Sign Up</a>
+          <a class="nav-item nav-link active text-white" aria-current="page" href="/">Home</a>
+          <a class="nav-item nav-link text-white" href="about">About</a>
+          <a class="nav-item nav-link text-white" href="auth/login">Sign In</a>
+          <a class="nav-item btn btn-primary tombol text-white" href="auth/register">Sign Up</a>
         </div>
       </div>
     </div>
@@ -38,8 +38,8 @@
   {{-- akhir navbar --}}
 <div class="container">
 <h1>Halaman About</h1>
-<h3>{{$name}}</h3>
-<p>{{$email}}</p>
-<img src="img/{{$image}}" alt={{$name}} width="200" class="img-thumbnail rounded-circle">
+<h3>{{$users[0]->name}}</h3>
+<p>{{$users[0]->email}}</p>
+<img src="/img/user.png" alt={{$users[0]->name}} width="200" class="img-thumbnail rounded-circle">
 </div>
 

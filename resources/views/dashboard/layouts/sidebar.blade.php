@@ -13,6 +13,12 @@
             Tournaments
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link {{ Request::is('dashboard/about*') ? 'active' : '' }}" href="/dashboard/about">
+            <span data-feather="file" class="align-text-bottom"></span>
+            About
+          </a>
+        </li>
       </ul>
 
       @can('admin')

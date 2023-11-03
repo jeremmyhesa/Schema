@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Tournament;
 use App\Models\Round;
+use App\Models\Team;
 use App\Models\Category;
+use App\Models\Tournament;
 use Illuminate\Http\Request;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Storage;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class DashboardTournamentController extends Controller
 {
@@ -21,18 +22,37 @@ class DashboardTournamentController extends Controller
     {
         return view('dashboard.tournaments.index', [
             'title' => 'Tournaments',
-            'tournaments' => Tournament::where('user_id', auth()->user()->id)->get()
+            'tournaments' => Tournament::where('user_id', auth()->user()->id)->paginate(5)
         ]);
 
     }
 
     public function tournaments() {
-        return view('dashboard.index', [
+
+        $tournaments = Tournament::latest();
+
+        if(request('search')) {
+            $tournaments->where('title', 'like', '%' . request('search', 'category', 'organizer') . '%');
+        }
+
+        return view('dashboard/index', [
             "title" => "All Tournaments",
             "active" => 'tournaments',
-            'tournaments' => Tournament::where('user_id', auth()->user()->id)->get()
+            // 'tournaments' => Tournament::where('user_id', auth()->user()->id)->get(),
+            'tournaments' => $tournaments->where('user_id', auth()->user()->id)->paginate(4)
+
         ]);
     } 
+
+    public function participants() {
+        return view('dashboard.tournaments.participants', [
+            "title" => 'Add Participants',
+            "active" => 'tournaments',
+            // 'tournament' => Tournament::where('user_id', auth()->user()->id)->get(),
+            "teams" => Team::all()
+        ]);
+    }
+
 
     // public function tour(Tournament $tournament) {
     //     return view('dashboard.tournaments.show', [
@@ -61,6 +81,19 @@ class DashboardTournamentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function save(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required'|'max:255'
+        ]);
+        
+        Team::create($validatedData);
+
+        return redirect('/dashboard/tournaments/participants');
+        // ->with('add team succes');
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -76,7 +109,7 @@ class DashboardTournamentController extends Controller
         if($request->file('image')) {
             $validatedData['image'] = $request->file('image')->store('tournament-images');
         }
-
+        
         $validatedData['user_id'] = auth()->user()->id;
 
         Tournament::create($validatedData);
@@ -90,12 +123,13 @@ class DashboardTournamentController extends Controller
      * @param  \App\Models\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function show(Tournament $tournament)
+    public function show(Tournament $tournament, Category $category)
     {
         return view('dashboard.tournaments.show', [
                 "title" => "Schema|Tournament",
                 "active" => 'tournaments',
-                "tournament" => $tournament
+                "tournament" => $tournament,
+                "category" => $category
                     ]);
     }
 
@@ -126,9 +160,9 @@ class DashboardTournamentController extends Controller
         $rules = [
             'title' => 'required|max:255',
             'category_id' => 'required',
+            'participants' => 'required|max:255', 
             'date' => 'required|date',
-            'image' => 'image|file|max:1024',
-            'participants' => 'required|max:255' 
+            'image' => 'image|file|max:1024'
         ];
 
         if($request->file('image')) {

@@ -83,10 +83,6 @@
         @enderror
       </div>
     </div>
-    <div class="mb-3 col-lg-6">
-      <label for="participants" class="form-label">Add Participants</label>
-      <textarea class="form-control" id="participants" name="participants" rows="5"></textarea>
-    </div>
     <button type="submit" class="btn btn-primary">Update Tournament</button>
   </form>
 </div>

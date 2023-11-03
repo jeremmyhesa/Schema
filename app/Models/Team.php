@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Round extends Model
+class Team extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
-
-    public function tournaments() {
-        return $this->belongsTo(Tournament::class, 'tournament_id');
-    }
+    // protected $with = ['game'];
 
     public function games() {
-        return $this->hasMany(Game::class);
+        return $this->belongsTo(Game::class);
     }
+
 }

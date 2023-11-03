@@ -24,7 +24,7 @@
         class="image-fluid mt-3">
       </div>
       @else  
-      <img src="https://source.unsplash.com/800x400?{{ $tournament->category->name }}" alt="{{ $tournament->category->name }}" 
+      <img src="/img/turnamen.jpg" alt="Turnamen" 
       class="image-fluid mt-3">
       @endif
       <h5>{{ $tournament->date }}</h5>

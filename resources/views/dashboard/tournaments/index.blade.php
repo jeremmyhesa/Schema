@@ -48,6 +48,7 @@
     </table>
 </div>
 
-
+{{-- pagination --}}
+{{ $tournaments->links() }}
   
 @endsection

@@ -6,7 +6,16 @@
     <h1 class="h2">Welcome Back, {{ auth()->user()->name }}</h1>
   </div>
 
-
+<div class="row justify-content-center mb-3">
+  <div class="col-md-6">
+    <form action="/dashboard" method="get">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search title..." name="search" value="{{ request('search') }}">
+        <button class="btn btn-dark" type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+</div>
 
   {{-- <div class="row justify-content-center mb-3">
     <div class="col-md-6">
@@ -29,8 +38,8 @@
         class="image-fluid mt-3">
         </div>
         @else  
-        <img src="https://source.unsplash.com/1200x400?{{ $tournaments[0]->category->name }}" 
-        class="card-img-top" alt="{{ $tournaments[0]->category->name }}">
+        <img src="img/turnamen.jpg"
+        class="card-img-top" alt="Turnamen">
         @endif
       
       <div class="card-body text-center">
@@ -40,7 +49,7 @@
         <small class="texx-muted">
           <p>By, <a href="/dashboard/index?organizer={{ $tournaments[0]->organizer->username }}" 
             class="text-decoration-none">{{ $tournaments[0]->organizer->name }}</a> in 
-            <a href="/dashboard/index?category={{ $tournaments[0]->category->slug }}" 
+            <a href="/categories/{{ $tournaments[0]->category->slug }}" 
               class="text-decoration-none">{{ $tournaments[0]->category->name }}
             </a> {{ $tournaments[0]->created_at->diffForHumans()}}</small></p>
             <p class="card-text">{{ $tournaments[0]->participants }}</p>
@@ -57,14 +66,14 @@
       <div class="col-md-4 mb-3">
         <div class="card">
           <div class="position-absolute px-3 py-2" style="background-color: rgba(0,0,0,0.5)">
-            <a href="/dashboard/index?category={{ $tournament->category->slug }}" 
+            <a href="/categories/{{ $tournaments[0]->category->slug }}" 
               class="text-white text-decoration-none">{{ $tournament->category->name }} </a></div>
               @if ($tournament->image)
           <img src="{{ asset('storage/' . $tournament->image) }}" alt="{{ $tournament->category->name }}" 
           class="image-fluid">
-        @else  
-        <img src="https://source.unsplash.com/500x400?{{ $tournament->category->name }}" 
-          class="card-img-top" alt="{{ $tournament->category->name }}">
+        @else
+        <img src="img/turnamen.jpg" 
+          class="card-img-top" alt="Turnamen">
         @endif
           
           <div class="card-body">
@@ -82,9 +91,12 @@
       @endforeach
     </div>
   </div>
+  @else
+    <p class="text-center fs-4">No tournament found</p>
   @endif
   
-   
+  {{-- pagination --}}
+  {{ $tournaments->links() }}
 
 
   
