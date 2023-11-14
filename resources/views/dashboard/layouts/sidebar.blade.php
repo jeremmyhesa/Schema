@@ -8,7 +8,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('dashboard/tournaments*') ? 'active' : '' }}" href="/dashboard/tournaments">
+          <a class="nav-link {{ Request::is('dashboard/tournaments*') ? 'active' : '' }} {{ Request::is('dashboard/participants') ? 'active' : '' }}" href="/dashboard/tournaments">
             <span data-feather="file" class="align-text-bottom"></span>
             Tournaments
           </a>

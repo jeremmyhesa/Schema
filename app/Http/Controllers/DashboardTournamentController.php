@@ -22,6 +22,7 @@ class DashboardTournamentController extends Controller
     {
         return view('dashboard.tournaments.index', [
             'title' => 'Tournaments',
+            'active' => 'tournaments',
             'tournaments' => Tournament::where('user_id', auth()->user()->id)->paginate(5)
         ]);
 
@@ -44,23 +45,65 @@ class DashboardTournamentController extends Controller
         ]);
     } 
 
-    public function participants() {
+    //Add Participants
+    public function participants(Tournament $tournament)
+    {
         return view('dashboard.tournaments.participants', [
             "title" => 'Add Participants',
             "active" => 'tournaments',
-            // 'tournament' => Tournament::where('user_id', auth()->user()->id)->get(),
-            "teams" => Team::all()
+            "tournament" => $tournament,
+            "teams" => Team::where('tournament_id', $tournament->id)->get()
+            // where('tournament_id', $tournament->id)
+        ]);
+    }
+    public function add(Request $request, Tournament $tournament)
+    {
+        $validatedData = $request->validate([
+            'name' => 'max:255|required'
+        ]);
+
+        $validatedData['tournament_id'] = $tournament->id;
+
+        Team::create($validatedData);
+
+        return redirect()->route('participants', ['tournament' => $tournament->slug]);
+    }
+    public function manage(Tournament $tournament, Team $team)
+    {
+        return view('dashboard.tournaments.manage', [
+            "title" => 'Manage Participants',
+            "active" => 'tournaments',
+            "tournament" => $tournament,
+            "teams" => Team::where('tournament_id', $tournament->id)->get(),
+            
         ]);
     }
 
+    public function upgrade(Request $request, Tournament $tournament, Team $team)
+    {
+        $rules = [
+            'name' => 'required|max:255',
+            
+        ];
+        $validatedData = $request->validate($rules);
 
-    // public function tour(Tournament $tournament) {
-    //     return view('dashboard.tournaments.show', [
-    //         "title" => "Schema|Tournament",
-    //         "active" => 'tournaments',
-    //         "tournament" => $tournament
-    //     ]);
-    // }
+        $validatedData['tournament_id'] = $tournament->id;
+
+        Team::where('id', $team->id)
+                ->update($validatedData);
+
+                return redirect()->route('manage', ['tournament' => $tournament->slug]);
+    }
+
+    public function delete(Tournament $tournament, Team $team)
+    {   
+        Team::destroy($team->id);
+        
+        return redirect()->route('manage', ['tournament' => $tournament->slug]);
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -82,20 +125,10 @@ class DashboardTournamentController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function save(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required'|'max:255'
-        ]);
-        
-        Team::create($validatedData);
 
-        return redirect('/dashboard/tournaments/participants');
-        // ->with('add team succes');
-    }
-
-    public function store(Request $request)
+    public function store(Request $request, Tournament $tournament)
     {
+
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|unique:tournaments',
@@ -115,6 +148,8 @@ class DashboardTournamentController extends Controller
         Tournament::create($validatedData);
 
         return redirect('/dashboard/tournaments/')->with('success', 'New tournament has been added!');
+
+
     } 
 
     /**

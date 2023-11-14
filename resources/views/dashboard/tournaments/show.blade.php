@@ -14,7 +14,7 @@
           @method('delete')
           @csrf
           <button class="btn btn-danger" onclick="return confirm('Are you sure?')"><span data-feather="x-circle"></span> Delete</button>
-          <a href="/dashboard/tournaments/participants" class="btn btn-danger">Add Participants</a>
+          <a href="/dashboard/tournaments/{{ $tournament->slug }}/participants" class="btn btn-danger">Add Participants</a>
           </form>
 
         

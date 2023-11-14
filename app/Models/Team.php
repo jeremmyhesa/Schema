@@ -10,10 +10,20 @@ class Team extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    // protected $with = ['game'];
+    // protected $with = ['tournament'];
 
-    public function games() {
-        return $this->belongsTo(Game::class);
+    // public function games() {
+    //     return $this->belongsTo(Game::class);
+    // }
+
+    // Probably
+    public function tournaments() {
+        return $this->belongsTo(Tournament::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
 }

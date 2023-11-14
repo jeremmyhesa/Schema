@@ -50,7 +50,11 @@ class Tournament extends Model
     public function games() {
         return $this->hasMany(Game::class);
     }
-
+    
+    public function teams() {
+        return $this->hasMany(Team::class);
+    }
+    
     public function getRouteKeyName()
     {
         return 'slug';

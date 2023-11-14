@@ -1,12 +1,12 @@
 <?php
 
+use App\Models\User;
 use App\Models\Category;
 use App\Models\Tournament;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminTournamentsController;
 use App\Http\Controllers\DashboardTournamentController;
@@ -56,19 +56,7 @@ Route::get('dashboard/about', function (User $user) {
     ]);
 });
 
-// Route::get('/dashboard/tours?category={category:slug}', function(Category $category) {
-//     return view('dashboard/tours/index', [
-//         'title' => "Tournaments by Category : $category->name",
-//         'tournaments' => $category->tournaments,
-//     ]);
-// });
 
-// Route::get('/organizer/{organizer:username}', function(User $organizer) {
-//     return view('dashboard/tours/index', [
-//         'title' => "Tournaments by : $organizer->name",
-//         'tournaments' => $organizer->tournaments
-//     ]);
-// });
 
 
 // Route::get('/dashboard', [TournamentController::class, 'show'])
@@ -80,17 +68,18 @@ Route::get('dashboard/about', function (User $user) {
 // Route::get('/dashboard', [DashboardTournamentController::class, 'tournaments'])
 // ->middleware('auth');
 
-Route::post('dashboard/tournaments/participants', [DashboardTournamentController::class, 'save']);
 
-Route::get('/dashboard/categories/checkSlug', [AdminCategoryController::class, 'checkSlug'])
-->middleware('auth');
 
 Route::get('/dashboard', [DashboardTournamentController::class, 'tournaments']);
 
-Route::get('/dashboard/index/{tournament:slug}', [DashboardTournamentController::class, 'show']);
+// Route::get('/dashboard/index/{tournament:slug}', [DashboardTournamentController::class, 'show']);
 
-
-Route::get('/dashboard/tournaments/participants', [DashboardTournamentController::class, 'participants']);
+// Participants
+Route::get('/dashboard/tournaments/{tournament:slug}/participants', [DashboardTournamentController::class, 'participants'])->name('participants');
+Route::post('dashboard/tournaments/{tournament:slug}/participants', [DashboardTournamentController::class, 'add']);
+Route::get('dashboard/tournaments/{tournament:slug}/manage', [DashboardTournamentController::class, 'manage'])->name('manage');
+Route::put('dashboard/tournaments/{tournament:slug}/manage/{team:id}', [DashboardTournamentController::class, 'upgrade']);
+Route::delete('dashboard/tournaments/{tournament:slug}/manage/{team:id}', [DashboardTournamentController::class, 'delete']);
 
 Route::get('/dashboard/tournaments/checkSlug', [DashboardTournamentController::class, 'checkSlug'])
 ->middleware('auth');
@@ -98,9 +87,14 @@ Route::get('/dashboard/tournaments/checkSlug', [DashboardTournamentController::c
 Route::resource('/dashboard/tournaments', DashboardTournamentController::class )
 ->middleware('auth');
 
-Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show')->middleware('admin');
+// Admin
 Route::get('/dashboard/tours', [AdminTournamentsController::class, 'index'])->middleware('admin');
 
-// Route::resource('/dashboard/tours', AdminTournamentsController::class)->except('show')->middleware('admin');
+// Category
+Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show')->middleware('admin');
+Route::get('/dashboard/categories/checkSlug', [AdminCategoryController::class, 'checkSlug'])
+->middleware('auth');
 
-// Route::resource('/dashboard/tournaments/participants', TeamController::class);
+// Route::resource('dashboard/participants', TeamController::class);
+
+
