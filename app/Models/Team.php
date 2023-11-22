@@ -26,4 +26,13 @@ class Team extends Model
         return 'slug';
     }
 
+    public function getDataAttribute($team)
+{
+    return json_decode($team);
+}
+public function setDataAttribute($team)
+{
+    $this->attributes['data'] = json_encode($team);
+}
+
 }

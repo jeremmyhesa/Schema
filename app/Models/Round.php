@@ -11,10 +11,6 @@ class Round extends Model
 
     protected $guarded = ['id'];
 
-    public function tournaments() {
-        return $this->belongsTo(Tournament::class, 'tournament_id');
-    }
-
     public function games() {
         return $this->hasMany(Game::class);
     }

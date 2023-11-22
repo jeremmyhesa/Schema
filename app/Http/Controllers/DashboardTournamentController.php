@@ -6,10 +6,12 @@ use App\Models\User;
 use App\Models\Round;
 use App\Models\Team;
 use App\Models\Category;
+use App\Models\Game;
 use App\Models\Tournament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Livewire\Component;
 
 class DashboardTournamentController extends Controller
 {
@@ -59,7 +61,7 @@ class DashboardTournamentController extends Controller
     public function add(Request $request, Tournament $tournament)
     {
         $validatedData = $request->validate([
-            'name' => 'max:255|required'
+            'name' => 'max:255|required',
         ]);
 
         $validatedData['tournament_id'] = $tournament->id;
@@ -70,14 +72,74 @@ class DashboardTournamentController extends Controller
     }
     public function manage(Tournament $tournament, Team $team)
     {
+
         return view('dashboard.tournaments.manage', [
             "title" => 'Manage Participants',
             "active" => 'tournaments',
             "tournament" => $tournament,
             "teams" => Team::where('tournament_id', $tournament->id)->get(),
+            "team" => $team
             
         ]);
     }
+
+    public function shuffle(Request $request, Tournament $tournament, Team $team)
+    {
+        $rows = Team::where('tournament_id', $tournament->id)->get();
+
+        $shuffledrows = $rows->shuffle();
+
+        foreach ($shuffledrows as $index => $row) {
+            Team::where('id', $row->id)
+                ->update(['name' => $row->name  . $index + 1]);
+        }
+        
+        // dump($value->name);
+        return redirect()->route('manage', ['tournament' => $tournament->slug]);
+
+        // return response()->json($shuffled);
+        
+    }
+
+    public function save(Tournament $tournament, Team $team)
+    {
+        $values = Team::where('tournament_id', $tournament->id)->get();
+
+        for ($i = 0; $i < $values->count(); $i += 2) {
+            $teamHome = $values[$i];
+            $teamAway = $values[$i + 1] ?? null; // If the number of teams is odd, the last team gets a bye
+        
+            // Create a new match
+            $game = new Game();
+            $game->tournament_id = $tournament->id;
+            if ($tournament->participants == 32) {
+                $game->round_id = 1;
+            }
+            if ($tournament->participants == 16) {
+                $game->round_id = 2;
+            }
+            if ($tournament->participants == 8) {
+                $game->round_id = 3;
+            }
+            $game->date = null;
+            $game->home_team_id = $teamHome->id;
+        
+            if ($teamAway) {
+                $game->away_team_id = $teamAway->id;
+            } else {
+            
+                // If the number of teams is odd, set tim_tamu to null
+        $game->away_team_id = null;
+    }
+
+    $game->home_team_score = null;
+    $game->away_team_score = null;
+    $game->save();
+    }
+    return redirect()->route('participants', ['tournament' => $tournament->slug]);
+}
+    
+    
 
     public function upgrade(Request $request, Tournament $tournament, Team $team)
     {
@@ -133,7 +195,7 @@ class DashboardTournamentController extends Controller
             'title' => 'required|max:255',
             'slug' => 'required|unique:tournaments',
             'category_id' => 'required',
-            'image' => 'image|file|max:1024',
+            'image' => 'image|file|max:2048',
             'date' => 'required|date',
             'participants' => 'required|max:255',
             'team_name' => 'max:500'
@@ -158,13 +220,15 @@ class DashboardTournamentController extends Controller
      * @param  \App\Models\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function show(Tournament $tournament, Category $category)
+    public function show(Tournament $tournament, Category $category, Team $team)
     {
         return view('dashboard.tournaments.show', [
                 "title" => "Schema|Tournament",
                 "active" => 'tournaments',
                 "tournament" => $tournament,
-                "category" => $category
+                "category" => $category,
+                "teams" => Team::where('tournament_id', $tournament->id)->get(),
+                "id" => Team::where('tournament_id', $tournament->id)
                     ]);
     }
 

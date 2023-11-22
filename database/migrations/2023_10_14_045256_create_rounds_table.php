@@ -15,7 +15,6 @@ class CreateRoundsTable extends Migration
     {
         Schema::create('rounds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tournament_id');
             // ** Round name (Ex: Semi final, Final dll)
             $table->string('name');
             $table->timestamps();

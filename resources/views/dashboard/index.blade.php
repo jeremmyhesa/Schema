@@ -54,7 +54,7 @@
             </a> {{ $tournaments[0]->created_at->diffForHumans()}}</small></p>
             <p class="card-text">{{ $tournaments[0]->participants }}</p>
   
-            <a href="/dashboard/index/{{ $tournaments[0]->slug }}" class="text-decoration-none btn btn-primary">Detail</a>
+            <a href="/dashboard/tournaments/{{ $tournaments[0]->slug }}" class="text-decoration-none btn btn-primary">Detail</a>
   
       </div>
     </div>
@@ -66,7 +66,7 @@
       <div class="col-md-4 mb-3">
         <div class="card">
           <div class="position-absolute px-3 py-2" style="background-color: rgba(0,0,0,0.5)">
-            <a href="/categories/{{ $tournaments[0]->category->slug }}" 
+            <a href="/dashboard?category={{ $tournament->category->slug }}" 
               class="text-white text-decoration-none">{{ $tournament->category->name }} </a></div>
               @if ($tournament->image)
           <img src="{{ asset('storage/' . $tournament->image) }}" alt="{{ $tournament->category->name }}" 
@@ -84,7 +84,7 @@
                 </a> {{ $tournament->created_at->diffForHumans()}}</small></p>
             <p class="card-text">{{ $tournament->date }}</p>
             <p class="card-text">{{ $tournament->participants }}</p>
-            <a href="/dashboard/index/{{ $tournament->slug }}" class="text-decoration-none btn btn-primary">Detail</a>
+            <a href="/dashboard/tournaments/{{ $tournament->slug }}" class="text-decoration-none btn btn-primary">Detail</a>
           </div>
         </div>
       </div>
@@ -93,6 +93,9 @@
   </div>
   @else
     <p class="text-center fs-4">No tournament found</p>
+    <div class="d-flex justify-content-center">
+    <a href="/dashboard/tournaments/create" class="btn btn-primary">Create new tournament</a>
+  </div>
   @endif
   
   {{-- pagination --}}

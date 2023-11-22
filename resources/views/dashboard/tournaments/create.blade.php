@@ -49,13 +49,14 @@
   </div>
   <div class="mb-3">
     <label for="participants" class="form-label">Participants</label>
-    <input type="string" class="form-control @error('participants')is-invalid @enderror" id="participants" name="participants" 
-    required value="{{ old('participants') }}">
-    @error('participants')
-    <div class="invalid-feedback">
-      {{ $message }}
-    </div>
-    @enderror
+    <div class="form-floating">
+    <select class="form-select" name="participants" id="participants">
+      <option value="8">8</option>
+      <option value="16">16</option>
+      <option value="32">32</option>
+    </select>
+    <label for="floatingSelect">Participants</label>
+  </div>
   </div>
   <div class="mb-3">
     <label for="image" class="form-label @error('image')is-invalid @enderror">Tournament Image</label>

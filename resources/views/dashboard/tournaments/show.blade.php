@@ -33,19 +33,18 @@
     </div>
     </div>
     <div class="bg-dark">
-      <main id='tournament' class="bracket">
+      <main id='tournament' class="bracket mb-5">
         <ul class='round round-1'>
+          
+          @foreach ($teams as $team )
           <li class='spacer'>&nbsp;</li>
-              <li class='game game-top'>Dwi<span>57</span></li>
+              <li class='game game-top'>{{ $team->name }}</li>
               <li class='game game-spacer'></li>
-              <li class='game game-bottom'>Sakethi<span>32</span></li>
+              <li class='game game-bottom'>{{ $team->name}}</li>
               <li class='spacer'>&nbsp;</li>
-              <li class='game game-top'>Ucok<span></span>13</li>
-              <li class='game game-spacer'></li>
-              <li class='game game-bottom'>Jeremy Hesa<span>78</span></li>
-              <li class='spacer'>&nbsp;</li>
+              @endforeach
         </ul>
-        <ul class='round round-2'>
+        {{-- <ul class='round round-2'>
           <li class='spacer'>&nbsp;</li>
               <li class='game game-top'>Dwi<span>53</span></li>
               <li class='game game-spacer'></li>
@@ -56,7 +55,7 @@
           <li class='spacer'>&nbsp;</li>
               <li class='game game-bottom'>Jeremy Hesa<span></span></li>
               <li class='spacer'>&nbsp;</li>
-        </ul>
+        </ul> --}}
       </main>
       </div>
   </div>

@@ -19,8 +19,9 @@ class CreateGamesTable extends Migration
             $table->foreignId('round_id');
             $table->foreignId('home_team_id');
             $table->foreignId('away_team_id');
-            $table->bigInteger('home_team_score');
-            $table->bigInteger('away_team_score');
+            $table->date('date')->nullable();
+            $table->bigInteger('home_team_score')->nullable();
+            $table->bigInteger('away_team_score')->nullable();
             $table->timestamps();
         });
     }

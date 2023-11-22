@@ -52,7 +52,7 @@
         @csrf
         <div class="input-group mb-3">
           <input type="text" name="name" class="form-control @error('name')is-invalid
-          @enderror" placeholder="Team Name" id="name"  value="{{ old('name') }}">
+          @enderror" placeholder="Team Name" id="name" autofocus value="{{ old('name') }}">
           <button class="btn btn-primary" type="submit">Add</button>
         </div>
       </form>

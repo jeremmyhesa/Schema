@@ -57,19 +57,6 @@ Route::get('dashboard/about', function (User $user) {
 });
 
 
-
-
-// Route::get('/dashboard', [TournamentController::class, 'show'])
-// ->middleware('auth');
-// Route::get('/dashboard', [TournamentController::class, 'index']);
-
-// // Single Page Tournament
-// Route::get('/dashboard/{tournament:slug}', [TournamentController::class, 'show']);
-// Route::get('/dashboard', [DashboardTournamentController::class, 'tournaments'])
-// ->middleware('auth');
-
-
-
 Route::get('/dashboard', [DashboardTournamentController::class, 'tournaments']);
 
 // Route::get('/dashboard/index/{tournament:slug}', [DashboardTournamentController::class, 'show']);
@@ -80,7 +67,13 @@ Route::post('dashboard/tournaments/{tournament:slug}/participants', [DashboardTo
 Route::get('dashboard/tournaments/{tournament:slug}/manage', [DashboardTournamentController::class, 'manage'])->name('manage');
 Route::put('dashboard/tournaments/{tournament:slug}/manage/{team:id}', [DashboardTournamentController::class, 'upgrade']);
 Route::delete('dashboard/tournaments/{tournament:slug}/manage/{team:id}', [DashboardTournamentController::class, 'delete']);
+Route::put('dashboard/tournaments/{tournament:slug}/manage', [DashboardTournamentController::class, 'shuffle']);
 
+// Make Game
+Route::post('dashboard/tournaments/{tournament:slug}/manage', [DashboardTournamentController::class, 'save']);
+
+
+// 
 Route::get('/dashboard/tournaments/checkSlug', [DashboardTournamentController::class, 'checkSlug'])
 ->middleware('auth');
 
