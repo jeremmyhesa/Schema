@@ -34,28 +34,70 @@
     </div>
     <div class="bg-dark">
       <main id='tournament' class="bracket mb-5">
+        {{-- Check Round --}}
         <ul class='round round-1'>
-          
-          @foreach ($teams as $team )
+          @foreach ($games as $game )
+          @if ($game->round_id == 1)
           <li class='spacer'>&nbsp;</li>
-              <li class='game game-top'>{{ $team->name }}</li>
-              <li class='game game-spacer'></li>
-              <li class='game game-bottom'>{{ $team->name}}</li>
-              <li class='spacer'>&nbsp;</li>
+          <li class='game game-top'>{{ $game->homeTeam->name ?? 'No Team'}}<span>{{ $game->home_team_score }}</span></li>
+          <li class='game game-spacer'></li>
+          <li class='game game-bottom'>{{ $game->awayTeam->name ?? 'No Team'}}<span>{{ $game->away_team_score }}</span></li>
+          <li class='spacer'>&nbsp;</li>
+          @endif
               @endforeach
-        </ul>
-        {{-- <ul class='round round-2'>
-          <li class='spacer'>&nbsp;</li>
-              <li class='game game-top'>Dwi<span>53</span></li>
-              <li class='game game-spacer'></li>
-              <li class='game game-bottom'>Jeremy Hesa<span>81</span></li>
+            </ul>
+            {{-- # --}}
+            
+            <ul class='round round-2'>
+              @foreach ($games as $game )
+              @if ($game->round_id == 2)
               <li class='spacer'>&nbsp;</li>
-        </ul>
+              <li class='game game-top'>{{ $game->homeTeam->name ?? 'No Team'}}<span>{{ $game->home_team_score }}</span></li>
+              <li class='game game-spacer'></li>
+              <li class='game game-bottom'>{{ $game->awayTeam->name ?? 'No Team'}}<span>{{ $game->away_team_score }}</span></li>
+              <li class='spacer'>&nbsp;</li>
+              @endif
+                  @endforeach
+                </ul>
+                <ul class='round round-3'>
+                  @foreach ($games as $game )
+                  @if ($game->round_id == 3)
+                  <li class='spacer'>&nbsp;</li>
+                  <li class='game game-top'>{{ $game->homeTeam->name ?? 'No Team'}}<span>{{ $game->home_team_score }}</span></li>
+                  <li class='game game-spacer'></li>
+                  <li class='game game-bottom'>{{ $game->awayTeam->name ?? 'No Team'}}<span>{{ $game->away_team_score }}</span></li>
+                  <li class='spacer'>&nbsp;</li>
+                  @endif
+                      @endforeach
+                    </ul>
+                    <ul class='round round-4'>
+                      @foreach ($games as $game )
+                      @if ($game->round_id == 4)
+                      <li class='spacer'>&nbsp;</li>
+                      <li class='game game-top'>{{ $game->homeTeam->name ?? 'No Team'}}<span>{{ $game->home_team_score }}</span></li>
+                      <li class='game game-spacer'></li>
+                      <li class='game game-bottom'>{{ $game->awayTeam->name ?? 'No Team'}}<span>{{ $game->away_team_score }}</span></li>
+                      <li class='spacer'>&nbsp;</li>
+                      @endif
+                          @endforeach
+                        </ul>
+                        <ul class='round round-5'>
+                          @foreach ($games as $game )
+                          @if ($game->round_id == 5)
+                          <li class='spacer'>&nbsp;</li>
+                          <li class='game game-top'>{{ $game->homeTeam->name ?? 'No Team'}}<span>{{ $game->home_team_score }}</span></li>
+                          <li class='game game-spacer'></li>
+                          <li class='game game-bottom'>{{ $game->awayTeam->name ?? 'No Team'}}<span>{{ $game->away_team_score }}</span></li>
+                          <li class='spacer'>&nbsp;</li>
+                          @endif
+                              @endforeach
+                            </ul>
         <ul class='round round-3'>
           <li class='spacer'>&nbsp;</li>
-              <li class='game game-bottom'>Jeremy Hesa<span></span></li>
+          
+              <li class='game game-bottom'>Jeremy Hesa (Winner)<span></span></li>
               <li class='spacer'>&nbsp;</li>
-        </ul> --}}
+        </ul>
       </main>
       </div>
   </div>

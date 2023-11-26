@@ -8,14 +8,20 @@
         <div class="d-flex justify-content flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Manage Participants</h1>
           </div>
+          
+          @if(session()-> has('error'))
+<div class="alert alert-danger col-md-8" role="alert">
+    {{ session('error') }}
+  </div>
+@endif
           <form action="/dashboard/tournaments/{{ $tournament->slug }}/manage" method="post" class="d-inline my-2">
             @method('put')
             @csrf
             <button class="btn btn-primary mb-3" type="submit">Shuffle</button>
         </form>
-          <form action="/dashboard/tournaments/{{ $tournament->slug }}/manage" method="post">
+          <form action="/dashboard/tournaments/{{ $tournament->slug }}/manage" method="post" class="d-inline">
             @csrf
-            <button class="btn btn-primary mb-3 " type="submit">Save</button>
+            <button class="btn btn-primary mb-3" onclick="return confirm('Are you sure you will run this tournament?')" type="submit">Save</button>
           </form>
           {{-- <a href="dashboard/tournaments/{{ $tournament->slug }}/participants" class="btn btn-success mb-3 mx-3">Save</a> --}}
 
@@ -33,11 +39,11 @@
               <button class="btn btn-primary" type="submit"><span data-feather="check"></span></button>
             </form>
             
-            <form action="/dashboard/tournaments/{{ $tournament->slug }}/manage/{{ $team->id }}" method="post" class="d-inline">
+            {{-- <form action="/dashboard/tournaments/{{ $tournament->slug }}/manage/{{ $team->id }}" method="post" class="d-inline">
               @method('delete')
               @csrf
               <button class="btn btn-danger" type="submit"><span data-feather="x-circle"></span></button>
-            </form>
+            </form> --}}
             </div>  
               @endforeach
             </div>

@@ -34,6 +34,29 @@ class Tournament extends Model
         });
     }
 
+    // Fungsi Max Participants
+    public function add($name)
+{
+    // Ambil jumlah peserta saat ini
+    $currentParticipants = $this->teams()->count();
+
+    // Ambil batas maksimal peserta dari kolom max_participants
+    $maxParticipants = $this->participants;
+
+    // Periksa apakah masih ada slot kosong untuk peserta baru
+    if ($currentParticipants < $maxParticipants) {
+        // Tambahkan peserta baru
+        Team::create([
+            'tournament_id' => $this->id,
+            'name' => $name,
+        ]);
+
+        return true; // Peserta berhasil ditambahkan
+    }
+
+    return false; // Peserta tidak dapat ditambahkan karena sudah mencapai batas maksimal
+}
+
     public function category() {
 
         return $this->belongsTo(Category::class);

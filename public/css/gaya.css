@@ -1,21 +1,22 @@
 main{
   display:flex;
   flex-direction:row;
+  margin-left:20px !important;
 }
 .round{
   display:flex;
   flex-direction:column;
   justify-content:center;
-  width:200px;
+  width:150px;
   list-style:none;
-  padding:0;
+  padding:5px;
 }
   .round .spacer{ flex-grow:1; }
   .round .spacer:first-child,
   .round .spacer:last-child{ flex-grow:.5; }
 
   .round .game-spacer{
-    flex-grow:1;
+    flex-grow:2;
   }
 
 /*
@@ -29,7 +30,7 @@ body{
 }
 
 li.game{
-  padding-left:15px;
+  padding-left:5spx;
 }
 
 
@@ -38,18 +39,24 @@ li.game{
     margin-right:5px;
   }
 
-  li.game-top{ border-bottom:1px solid #aaa; }
+  li.game-top { 
+    border-bottom:1px solid #aaa;
+    margin-top: 30px;
+  }
 
   li.game-spacer{ 
     border-right:1px solid #aaa;
-    min-height:40px;
+    min-height:35px;
   }
 
   li.game-bottom{ 
     border-top:1px solid #aaa;
   }
+
+  
   /* bracket */
   .bracket {
+    margin-top: 30px;
     margin-left: 128px;
   }
   .bracket, li {

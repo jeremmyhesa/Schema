@@ -20,19 +20,15 @@ class Team extends Model
     public function tournaments() {
         return $this->belongsTo(Tournament::class);
     }
+    
+    public function games()
+    {
+        return $this->hasMany(Game::class, 'home_team_id')->orWhere('away_team_id');
+    }
 
     public function getRouteKeyName()
     {
         return 'slug';
     }
-
-    public function getDataAttribute($team)
-{
-    return json_decode($team);
-}
-public function setDataAttribute($team)
-{
-    $this->attributes['data'] = json_encode($team);
-}
 
 }

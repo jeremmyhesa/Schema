@@ -48,18 +48,35 @@ class DashboardTournamentController extends Controller
     } 
 
     //Add Participants
-    public function participants(Tournament $tournament)
+    public function participants(Tournament $tournament, Team $team)
     {
         return view('dashboard.tournaments.participants', [
             "title" => 'Add Participants',
             "active" => 'tournaments',
             "tournament" => $tournament,
-            "teams" => Team::where('tournament_id', $tournament->id)->get()
-            // where('tournament_id', $tournament->id)
+            "teams" => Team::where('tournament_id', $tournament->id)->get(),
+            "team" => $team
         ]);
     }
-    public function add(Request $request, Tournament $tournament)
+
+//     public function add(Request $request, Tournament $tournament)
+// {
+//     $participantName = $request->input('name');
+
+//     if ($tournament->addParticipant($participantName)) {
+//         return redirect()->route('participants', ['tournament' => $tournament->slug]);
+//     } else {
+//         return redirect()->back()->with('error', 'Turnamen sudah mencapai batas peserta maksimal.');
+//     }
+// }
+    public function add(Request $request, Tournament $tournament, Team $team)
     {
+        $values = Team::where('tournament_id', $tournament->id)->get();
+        $currentTeams = $values->count();
+
+        $maxTeams = $tournament->participants;
+
+    if ($currentTeams < $maxTeams) {
         $validatedData = $request->validate([
             'name' => 'max:255|required',
         ]);
@@ -67,9 +84,12 @@ class DashboardTournamentController extends Controller
         $validatedData['tournament_id'] = $tournament->id;
 
         Team::create($validatedData);
-
         return redirect()->route('participants', ['tournament' => $tournament->slug]);
+    } else {
+        return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "Teams Full");
     }
+    }
+
     public function manage(Tournament $tournament, Team $team)
     {
 
@@ -83,66 +103,110 @@ class DashboardTournamentController extends Controller
         ]);
     }
 
-    public function shuffle(Request $request, Tournament $tournament, Team $team)
+    public function shuffle(Tournament $tournament, Team $team)
     {
-        $rows = Team::where('tournament_id', $tournament->id)->get();
+        // Check Existing Game
+        $games = Game::where('tournament_id', $tournament->id)->get();
 
-        $shuffledrows = $rows->shuffle();
-
-        foreach ($shuffledrows as $index => $row) {
-            Team::where('id', $row->id)
-                ->update(['name' => $row->name  . $index + 1]);
+        for ($i = 0; $i < $games->count(); $i ++) {
+            $existing_game = Game::find($games[$i]);
+            if ($existing_game) {
+                return redirect()->route('manage', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
+            } 
         }
+        // #
+
+        $values = Team::where('tournament_id', $tournament->id)->get();
+        $shuffled = $values->shuffle();
         
-        // dump($value->name);
+        for ($i = 0; $i < $shuffled->count(); $i ++ ) {
+            $team_name = $shuffled[$i]->name;
+            $tournament_id = $shuffled[$i]->tournament_id;
+            $team_id = $values[$i]->id;
+
+        $teams = Team::find($team_id);
+        $teams->tournament_id = $tournament_id;
+        $teams->name = $team_name;
+        $teams->save(); 
+
+
+}
         return redirect()->route('manage', ['tournament' => $tournament->slug]);
 
-        // return response()->json($shuffled);
-        
     }
 
-    public function save(Tournament $tournament, Team $team)
-    {
+    public function save(Tournament $tournament, Team $team, Game $game)
+    {   
         $values = Team::where('tournament_id', $tournament->id)->get();
+        $currentTeams = $values->count();
+        $maxTeams = $tournament->participants;
+        $games = Game::where('tournament_id', $tournament->id)->get();
+        
+        // Check Team
+        if ($currentTeams < $maxTeams ) {
+            return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "Must Complete the participants first");
+        }
+        // #
+        // Check Existing Game
+        for ($i = 0; $i < $games->count(); $i ++) {
+            $existing_game = Game::find($games[$i]);
+            if ($existing_game) {
+                // return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
+                return redirect()->route('tournament', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
+            } 
+        }
+        // #
 
-        for ($i = 0; $i < $values->count(); $i += 2) {
-            $teamHome = $values[$i];
-            $teamAway = $values[$i + 1] ?? null; // If the number of teams is odd, the last team gets a bye
+                for ($i = 0; $i < $values->count(); $i += 2) {
+                    $teamHome = $values[$i];
+                    $teamAway = $values[$i + 1] ?? null; // If the number of teams is odd, the last team gets a bye
+
+                    // Create a new game
+                    $game = new Game();
+                    $game->tournament_id = $tournament->id;
+                    if ($tournament->participants == 32) {
+                        $game->round_id = 1;
+                    }
+                    if ($tournament->participants == 16) {
+                        $game->round_id = 2;
+                    }
+                    if ($tournament->participants == 8) {
+                        $game->round_id = 3;
+                    }
+                    $game->date = null;
+                    $game->home_team_id = $teamHome->id;
+                
+                    if ($teamAway) {
+                        $game->away_team_id = $teamAway->id;
+                    } else {
+                    
+                        // If the number of teams is odd, set tim_tamu to null
+                $game->away_team_id = null;
+            }
         
-            // Create a new match
-            $game = new Game();
-            $game->tournament_id = $tournament->id;
-            if ($tournament->participants == 32) {
-                $game->round_id = 1;
-            }
-            if ($tournament->participants == 16) {
-                $game->round_id = 2;
-            }
-            if ($tournament->participants == 8) {
-                $game->round_id = 3;
-            }
-            $game->date = null;
-            $game->home_team_id = $teamHome->id;
-        
-            if ($teamAway) {
-                $game->away_team_id = $teamAway->id;
-            } else {
+            $game->home_team_score = null;
+            $game->away_team_score = null;
+            $game->save();
             
-                // If the number of teams is odd, set tim_tamu to null
-        $game->away_team_id = null;
-    }
-
-    $game->home_team_score = null;
-    $game->away_team_score = null;
-    $game->save();
-    }
-    return redirect()->route('participants', ['tournament' => $tournament->slug]);
+        }
+        return redirect('/dashboard/tournaments/{{ $tournament->slug }}');
+            // return redirect()->route('participants', ['tournament' => $tournament->slug]);
 }
-    
-    
 
+    
+    
     public function upgrade(Request $request, Tournament $tournament, Team $team)
     {
+        // Check Existing Game
+        $games = Game::where('tournament_id', $tournament->id)->get();
+
+        for ($i = 0; $i < $games->count(); $i ++) {
+            $existing_game = Game::find($games[$i]);
+            if ($existing_game) {
+                return redirect()->route('manage', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
+            } 
+        // #
+        }
         $rules = [
             'name' => 'required|max:255',
             
@@ -159,9 +223,19 @@ class DashboardTournamentController extends Controller
 
     public function delete(Tournament $tournament, Team $team)
     {   
+        $games = Game::where('tournament_id', $tournament->id)->get();
+
+        // Check Existing Game
+        for ($i = 0; $i < $games->count(); $i ++) {
+            $existing_game = Game::find($games[$i]);
+            if ($existing_game) {
+                return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
+            } 
+        // #
+        }
         Team::destroy($team->id);
         
-        return redirect()->route('manage', ['tournament' => $tournament->slug]);
+        return redirect()->route('participants', ['tournament' => $tournament->slug]);
     }
 
 
@@ -220,15 +294,20 @@ class DashboardTournamentController extends Controller
      * @param  \App\Models\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function show(Tournament $tournament, Category $category, Team $team)
+    public function show(Tournament $tournament, Category $category, Team $team, Game $game)
     {
+        // $games = Game::with('homeTeam', 'awayTeam')->find($game);
+        // $homeTeamName = $games->homeTeam->name;
+        // $awayTeamName = $games->awayTeam->name;
+        // dump($games);
+
         return view('dashboard.tournaments.show', [
                 "title" => "Schema|Tournament",
                 "active" => 'tournaments',
                 "tournament" => $tournament,
                 "category" => $category,
                 "teams" => Team::where('tournament_id', $tournament->id)->get(),
-                "id" => Team::where('tournament_id', $tournament->id)
+                "games" => Game::where('tournament_id', $tournament->id)->with('homeTeam', 'awayteam')->get(),
                     ]);
     }
 

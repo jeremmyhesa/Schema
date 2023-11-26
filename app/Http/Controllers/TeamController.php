@@ -15,12 +15,14 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Tournament $tournament)
+    public function participants(Tournament $tournament)
     {
-        return view('dashboard.participants.index', [
+        return view('dashboard.tournaments.participants', [
             "title" => 'Add Participants',
             "active" => 'tournaments',
-            "teams" => Team::where('tournament_id', $tournament->id)
+            "tournament" => $tournament,
+            "teams" => Team::where('tournament_id', $tournament->id)->get()
+            // where('tournament_id', $tournament->id)
         ]);
     }
 
@@ -121,8 +123,6 @@ class TeamController extends Controller
      */
     public function destroy(Team $team)
     {
-        Team::destroy($team->id);
-
-        // return redirect('/dashboard/participants/');
+        
     }
 }

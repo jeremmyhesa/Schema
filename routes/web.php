@@ -64,9 +64,9 @@ Route::get('/dashboard', [DashboardTournamentController::class, 'tournaments']);
 // Participants
 Route::get('/dashboard/tournaments/{tournament:slug}/participants', [DashboardTournamentController::class, 'participants'])->name('participants');
 Route::post('dashboard/tournaments/{tournament:slug}/participants', [DashboardTournamentController::class, 'add']);
+Route::delete('dashboard/tournaments/{tournament:slug}/participants/{team:id}', [DashboardTournamentController::class, 'delete'])->name('delete_team');
 Route::get('dashboard/tournaments/{tournament:slug}/manage', [DashboardTournamentController::class, 'manage'])->name('manage');
 Route::put('dashboard/tournaments/{tournament:slug}/manage/{team:id}', [DashboardTournamentController::class, 'upgrade']);
-Route::delete('dashboard/tournaments/{tournament:slug}/manage/{team:id}', [DashboardTournamentController::class, 'delete']);
 Route::put('dashboard/tournaments/{tournament:slug}/manage', [DashboardTournamentController::class, 'shuffle']);
 
 // Make Game
@@ -79,6 +79,7 @@ Route::get('/dashboard/tournaments/checkSlug', [DashboardTournamentController::c
 
 Route::resource('/dashboard/tournaments', DashboardTournamentController::class )
 ->middleware('auth');
+Route::get('dashboard/tournaments/{tournament:slug}', [DashboardTournamentController::class, 'show'])->name('tournament');
 
 // Admin
 Route::get('/dashboard/tours', [AdminTournamentsController::class, 'index'])->middleware('admin');
