@@ -54,7 +54,7 @@ class DashboardTournamentController extends Controller
             "title" => 'Add Participants',
             "active" => 'tournaments',
             "tournament" => $tournament,
-            "teams" => Team::where('tournament_id', $tournament->id)->get(),
+            "teams" => Team::where('tournament_id', $tournament->id)->paginate(8),
             "team" => $team
         ]);
     }
@@ -78,7 +78,7 @@ class DashboardTournamentController extends Controller
 
     if ($currentTeams < $maxTeams) {
         $validatedData = $request->validate([
-            'name' => 'max:255|required',
+            'name' => 'max:11|required',
         ]);
 
         $validatedData['tournament_id'] = $tournament->id;
@@ -189,7 +189,7 @@ class DashboardTournamentController extends Controller
             $game->save();
             
         }
-        return redirect('/dashboard/tournaments/{{ $tournament->slug }}');
+        return redirect()->route('tournament', ['tournament' => $tournament->slug])->with('success', "Tournament is ready to run");
             // return redirect()->route('participants', ['tournament' => $tournament->slug]);
 }
 
@@ -296,19 +296,38 @@ class DashboardTournamentController extends Controller
      */
     public function show(Tournament $tournament, Category $category, Team $team, Game $game)
     {
-        // $games = Game::with('homeTeam', 'awayTeam')->find($game);
-        // $homeTeamName = $games->homeTeam->name;
-        // $awayTeamName = $games->awayTeam->name;
-        // dump($games);
-
         return view('dashboard.tournaments.show', [
-                "title" => "Schema|Tournament",
-                "active" => 'tournaments',
-                "tournament" => $tournament,
-                "category" => $category,
-                "teams" => Team::where('tournament_id', $tournament->id)->get(),
-                "games" => Game::where('tournament_id', $tournament->id)->with('homeTeam', 'awayteam')->get(),
-                    ]);
+                    "title" => "Schema|Tournament",
+                    "active" => 'tournaments',
+                    "tournament" => $tournament,
+                    "category" => $category,
+                    "teams" => Team::where('tournament_id', $tournament->id)->get(),
+                    "games_1" => Game::where('tournament_id', $tournament->id)
+                                    ->where('round_id', 1 )
+                                    ->with('homeTeam', 'awayTeam')->get(),
+                    "games_2" => Game::where('tournament_id', $tournament->id)
+                                    ->where('round_id', 2 )
+                                    ->with('homeTeam', 'awayTeam')->get(),
+                    "games_3" => Game::where('tournament_id', $tournament->id)
+                                    ->where('round_id', 3 )
+                                    ->with('homeTeam', 'awayTeam')->get(),
+                    "games_4" => Game::where('tournament_id', $tournament->id)
+                                    ->where('round_id', 4 )
+                                    ->with('homeTeam', 'awayTeam')->get(),
+                    "finals" => Game::where('tournament_id', $tournament->id)
+                                    ->where('round_id', 5 )
+                                    ->with('homeTeam', 'awayTeam')->get(),
+                    "winner" => Game::where('tournament_id', $tournament->id)
+                                    ->where('round_id', 6 )
+                                    ->with('homeTeam', 'awayTeam')->get(),
+                    "rounds" => Round::all(),
+                        ]);
+    }
+
+    // Make Next Round
+    public function store_match(Request $request, Tournament $tournament, Team $team, Game $game)
+    {
+        dd('OK');
     }
 
     /**

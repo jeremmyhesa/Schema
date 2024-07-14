@@ -17,7 +17,7 @@ class CreateTeamsTable extends Migration
             $table->id();
             $table->foreignId('tournament_id');
             // $table->foreignId('game_id');
-            $table->string('name');
+            $table->string('name', 11);
             $table->timestamps();
         });
     }

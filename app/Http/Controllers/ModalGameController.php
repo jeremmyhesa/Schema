@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Round1;
-use App\Http\Requests\StoreRound1Request;
-use App\Http\Requests\UpdateRound1Request;
+use Illuminate\Http\Request;
 
-class Round1Controller extends Controller
+class ModalGameController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,21 +29,21 @@ class Round1Controller extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRound1Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRound1Request $request)
+    public function store(Request $request)
     {
-        //
+        dd('OK');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Round1  $round1
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Round1 $round1)
+    public function show($id)
     {
         //
     }
@@ -53,10 +51,10 @@ class Round1Controller extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Round1  $round1
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Round1 $round1)
+    public function edit($id)
     {
         //
     }
@@ -64,11 +62,11 @@ class Round1Controller extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateRound1Request  $request
-     * @param  \App\Models\Round1  $round1
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRound1Request $request, Round1 $round1)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,10 +74,10 @@ class Round1Controller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Round1  $round1
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Round1 $round1)
+    public function destroy($id)
     {
         //
     }

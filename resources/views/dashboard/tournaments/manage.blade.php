@@ -14,7 +14,7 @@
     {{ session('error') }}
   </div>
 @endif
-          <form action="/dashboard/tournaments/{{ $tournament->slug }}/manage" method="post" class="d-inline my-2">
+        <form action="/dashboard/tournaments/{{ $tournament->slug }}/manage" method="post" class="d-inline my-2">
             @method('put')
             @csrf
             <button class="btn btn-primary mb-3" type="submit">Shuffle</button>

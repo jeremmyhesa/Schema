@@ -10,6 +10,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminTournamentsController;
 use App\Http\Controllers\DashboardTournamentController;
+use App\Http\Controllers\ModalGameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +81,9 @@ Route::get('/dashboard/tournaments/checkSlug', [DashboardTournamentController::c
 Route::resource('/dashboard/tournaments', DashboardTournamentController::class )
 ->middleware('auth');
 Route::get('dashboard/tournaments/{tournament:slug}', [DashboardTournamentController::class, 'show'])->name('tournament');
+// Make Next Round
+Route::post('dashboard/tournaments/{tournament:slug}', [DashboardTournamentController::class, 'store_match'])->name('store_match');
+
 
 // Admin
 Route::get('/dashboard/tours', [AdminTournamentsController::class, 'index'])->middleware('admin');

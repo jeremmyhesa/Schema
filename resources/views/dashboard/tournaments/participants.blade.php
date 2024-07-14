@@ -5,7 +5,7 @@
 <div class="row justify-content">
   <div class="col-md-6">
     <div class="d-flex justify-content flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h1 class="h2">Add Participants</h1>
+      <h1 class="h2">Add Participants (Perbaikan setelah add back to page)</h1>
     </div>
 
     @if(session()-> has('error'))
@@ -41,6 +41,9 @@
     
   </tbody>
 </table>
+
+{{-- pagination --}}
+{{ $teams->links() }}
 
 <a href="/dashboard/tournaments/{{ $tournament->slug }}/manage" class="btn btn-success"><span class="mb-1" data-feather="folder"></span> Manage </a>
 <a href="/dashboard/tournaments/{{ $tournament->slug }}" class="btn btn-success mx-3"><span class="mb-1" data-feather="folder"></span> Bracket </a>

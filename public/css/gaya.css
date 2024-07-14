@@ -1,27 +1,16 @@
+/* bracket */
+.bracket {
+  margin-left: 128px;
+}
+.bracket, li {
+  color: white;
+}
+
 main{
   display:flex;
   flex-direction:row;
   margin-left:20px !important;
 }
-.round{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  width:150px;
-  list-style:none;
-  padding:5px;
-}
-  .round .spacer{ flex-grow:1; }
-  .round .spacer:first-child,
-  .round .spacer:last-child{ flex-grow:.5; }
-
-  .round .game-spacer{
-    flex-grow:2;
-  }
-
-/*
- *  General Styles
-*/
 body{
   font-family:sans-serif;
   font-size:small;
@@ -30,36 +19,468 @@ body{
 }
 
 li.game{
-  padding-left:5spx;
+  padding-left:2px;
+}
+div.top{
+  background-color: #ccc !important;
+}
+.first{
+  border: 1px solid white;
+  min-width: 170px;
+  text-align: center;
+}
+span.first-round{
+  margin-left: 5px;
 }
 
 
-  li.game span{
+/* Round-1 */
+ul.round-1{
+  margin-top: -25px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:150px;
+  list-style:none;
+  padding:5px;
+}
+
+
+div.game{
+  margin-left: 15px;
+  max-width: 100px;
+  max-height: 25px;
+  min-height: 25px;
+}
+span.name{
+  margin-top: -7px;
+}
+div.game-top{
+  margin-top: 12px;
+  border: 2px solid #fff;
+  
+}
+div.game-bottom{
+  border: 2px solid #fff;
+}
+li.spacer{
+  margin-top: -22px;
+}
+
+/* Line Space */
+.right-spacer{
+  margin-top: 2px;
+  margin-left: -64px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-space{
+  margin-top: 28px;
+  margin-right: 30px;
+  margin-bottom: 11px;
+  width: 40px;
+  min-height: 62px;
+  border-left: none !important;
+  border: 1px solid #fff;
+}
+.strip{
+  margin-top: 11px;
+  margin-left: -60px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line{
+  margin-top: 50px;
+  min-height: 72px;
+  width: 23px;
+  border-top: 1px solid #fff;
+}
+.button-1{
+  margin-top: -20px;
+  margin-left: -108px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.play-1{
+  max-width: 27px;
+  background-color: black;
+  margin-top: 40px;
+}
+.no-play-1{
+  background-color: transparent;
+  opacity: 0;
+  margin-top: 24px;
+}
+
+/* Round-2 */
+ul.round-2{
+  margin-top: -130px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:150px;
+  list-style:none;
+  padding:5px;
+}
+
+div.game-2{
+  margin-left: 18px;
+  min-height: 25px;
+  max-height: 25px;
+  max-width: 100px;
+}
+div.game-top-2{
+  margin-top: 95px;
+  border: 2px solid #fff;
+}
+div.game-bottom-2{
+  border: 2px solid #fff;
+}
+li.spacer-2{
+  margin-top: -44px;
+}
+
+.right-spacer-2{
+  margin-top: -40px;
+  margin-left: -54px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-space-2{
+  margin-top: 100px;
+  width: 40px;
+  min-height: 123px;
+  border-left: none !important;
+  border: 1px solid #fff;
+}
+
+.strip-2{
+  margin-top: -22px;
+  margin-left: -32px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-2{
+  margin-top: 143px;
+  min-height: 100px;
+  width: 23px;
+  border-top: 1px solid #fff;
+}
+
+.button-2{
+  margin-top: -50px;
+  margin-left: -112px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.play-2{
+  max-width: 27px;
+  margin-top: 101px;
+  background-color: black;
+}
+.no-play-2{
+  margin-top: 85px;
+  opacity: 0;
+  background-color: transparent;
+}
+/* #2 */
+
+/* Round 3 */
+ul.round-3{
+  margin-top: -122px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:150px;
+  list-style:none;
+  padding:5px;
+}
+
+div.game-3{
+  margin-left: 22px;
+  min-height: 25px;
+  max-height: 25px;
+  max-width: 100px;
+}
+div.game-top-3{
+  margin-top: 150px;
+  border: 2px solid #fff;
+}
+div.game-bottom-3{
+  border: 2px solid #fff;
+}
+li.spacer-3{
+  margin-top: 22px;
+}
+
+.right-spacer-3{
+  margin-top: -100px;
+  margin-left: -48px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-space-3{
+  margin-top: 221px;
+  width: 40px;
+  min-height: 244px;
+  border-left: none !important;
+  border: 1px solid #fff;
+}
+
+.strip-3{
+  margin-top: -50px;
+  margin-left: -32px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-3{
+  margin-top: 290px;
+  min-height: 200px;
+  width: 23px;
+  border-top: 1px solid #fff;
+}
+
+.button-3{
+  margin-top: -113px;
+  margin-left: -110px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.play-3{
+  max-width: 27px;
+  margin-top: 223px;
+  background-color: black;
+}
+.no-play-3{
+  margin-top: 206px;
+  opacity: 0;
+  background-color: transparent;
+}
+/* #3 */
+
+/* Round-4 */
+ul.round-4{
+  margin-top: -62px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:150px;
+  list-style:none;
+  padding:5px;
+}
+
+div.game-4{
+  margin-left: 22px;
+  min-height: 25px;
+  max-height: 25px;
+  max-width: 100px;
+}
+div.game-top-4{
+  margin-top: 244px;
+  border: 2px solid #fff;
+}
+div.game-bottom-4{
+  border: 2px solid #fff;
+}
+li.spacer-4{
+  margin-top: 176px;
+}
+
+.right-spacer-4{
+  margin-top: 20px;
+  margin-left: -49px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-space-4{
+  margin-top: 221px;
+  width: 40px;
+  min-height: 491px;
+  border-left: none !important;
+  border: 1px
+   solid #fff;
+}
+
+.strip-4{
+  margin-top: 200px;
+  margin-left: -32px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-4{
+  margin-top: 290px;
+  min-height: 200px;
+  width: 23px;
+  border-top: 1px solid #fff;
+}
+
+.button-4{
+  margin-top: -238px;
+  margin-left: -110px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.play-4{
+  max-width: 27px;
+  margin-top: 469px;
+  background-color: black;
+}
+.no-play-4{
+  margin-top: 454px;
+  opacity: 0;
+  background-color: transparent;
+}
+/* #4 */
+
+/* Round-5 */
+ul.round-5{
+  margin-top: -62px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:150px;
+  list-style:none;
+  padding:5px;
+}
+
+div.game-5{
+  margin-left: 23px;
+  min-height: 25px;
+  max-height: 25px;
+  max-width: 100px;
+}
+div.game-top-5{
+  margin-top: 57px;
+  border: 2px solid #fff;
+}
+div.game-bottom-5{
+  border: 2px solid #fff;
+}
+
+.strip-5{
+  margin-top: 201px;
+  margin-left: -50px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+div.line-5{
+  margin-top: 290px;
+  min-height: 200px;
+  width: 23px;
+  border-top: 1px solid #fff;
+}
+
+.button-5{
+  margin-top: 481px;
+  margin-left: -70px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+.play-5{
+  max-width: 27px;
+  background-color: black;
+}
+.no-play-5{
+  opacity: 0;
+  background-color: transparent;
+}
+
+/* #5 */
+
+/* 6 */
+ul.round-6{
+  margin-top: -35px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:150px;
+  list-style:none;
+  padding:5px;
+}
+
+div.winner{
+  margin-left: 30px;
+}
+div.game-6{
+  margin-left: 15px;
+  min-height: 25px;
+  max-height: 25px;
+  max-width: 100px;
+}
+div.game-top-6{
+  border: 2px solid #fff;
+}
+
+
+
+
+
+
+
+
+
+
+  /* .round .spacer{ flex-grow:.1; }
+  .round .spacer:first-child,
+  .round .spacer:last-child{ flex-grow:.1; }
+
+  .round .game-spacer{
+    flex-grow:2;
+  } */
+
+/*
+ *  General Styles
+*/
+
+/* main{
+  display:flex;
+  flex-direction:row;
+  margin-left:20px !important;
+}
+.round{
+  margin-bottom: 50px;
+  margin-top: -8px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:150px;
+  list-style:none;
+  padding:5px;
+} */
+
+
+
+  /* li.game span{
     float:right;
     margin-right:5px;
-  }
+  } */
 
-  li.game-top { 
+  /* li.game-top { 
     border-bottom:1px solid #aaa;
     margin-top: 30px;
-  }
-
-  li.game-spacer{ 
-    border-right:1px solid #aaa;
-    min-height:35px;
-  }
-
-  li.game-bottom{ 
-    border-top:1px solid #aaa;
-  }
+  } */
 
   
-  /* bracket */
-  .bracket {
-    margin-top: 30px;
-    margin-left: 128px;
-  }
-  .bracket, li {
-    color: white;
-  }
+
+  /* li.game-bottom{ 
+    border-top:1px solid #aaa;
+  } */
+  
+
+  
+  
  
