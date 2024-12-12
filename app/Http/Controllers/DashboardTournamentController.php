@@ -11,6 +11,8 @@ use App\Models\Tournament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class DashboardTournamentController extends Controller
@@ -151,7 +153,6 @@ class DashboardTournamentController extends Controller
         for ($i = 0; $i < $games->count(); $i ++) {
             $existing_game = Game::find($games[$i]);
             if ($existing_game) {
-                // return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
                 return redirect()->route('tournament', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
             } 
         }
@@ -159,7 +160,7 @@ class DashboardTournamentController extends Controller
 
                 for ($i = 0; $i < $values->count(); $i += 2) {
                     $teamHome = $values[$i];
-                    $teamAway = $values[$i + 1] ?? null; // If the number of teams is odd, the last team gets a bye
+                    $teamAway = $values[$i + 1] ?? null;
 
                     // Create a new game
                     $game = new Game();
@@ -180,7 +181,6 @@ class DashboardTournamentController extends Controller
                         $game->away_team_id = $teamAway->id;
                     } else {
                     
-                        // If the number of teams is odd, set tim_tamu to null
                 $game->away_team_id = null;
             }
         
@@ -319,16 +319,99 @@ class DashboardTournamentController extends Controller
                                     ->with('homeTeam', 'awayTeam')->get(),
                     "winner" => Game::where('tournament_id', $tournament->id)
                                     ->where('round_id', 6 )
-                                    ->with('homeTeam', 'awayTeam')->get(),
+                                    ->with('homeTeam', 'awayTeam')->first(),
                     "rounds" => Round::all(),
                         ]);
     }
 
     // Make Next Round
-    public function store_match(Request $request, Tournament $tournament, Team $team, Game $game)
+    public function nextRound(Request $request, Tournament $tournament, Round $round, Game $game)
     {
-        dd('OK');
+    // Dump incoming request data
+    // dd($request->all());
+
+    // Validation rules
+    $rules = [
+        'round_id' => 'required|integer|exists:rounds,id',
+        'tournament_id' => 'required|integer|exists:tournaments,id',
+        'home_team_id' => 'required|integer|exists:teams,id',
+        'away_team_id' => 'required|integer|exists:teams,id',
+        'home_team_score' => 'required|integer|min:0',
+        'away_team_score' => 'required|integer|min:0'
+    ];
+    $validatedData = $request->validate($rules);
+
+    // Determine winner
+    $winner_id = null;
+    if ($validatedData['home_team_score'] > $validatedData['away_team_score']) {
+        $winner_id = $validatedData['home_team_id'];
+    } elseif ($validatedData['away_team_score'] > $validatedData['home_team_score']) {
+        $winner_id = $validatedData['away_team_id'];
     }
+
+    // Log the winner id
+    Log::info('Winner ID: ' .$winner_id);
+
+
+    dd($winner_id);
+
+    $validatedData['winner_id'] = $winner_id;
+
+    Game::where('id', $game->id)
+                ->update($validatedData);
+
+    return redirect()->route('tournament.show', $tournament->id);
+
+
+}
+
+            
+            
+    //     return redirect()->route('tournament', ['tournament' => $tournament->slug])
+    //             ->with('success', "Games for the next round has been created successlly");
+        
+    // }
+
+//     protected function createNextRoundGames(Round $round, $winner_team_id, Tournament $tournament, Game $game)
+//     {      
+//     $currentRound = $game->round_id;
+//     $nextRound = $currentRound + 1;
+
+//     // Get all the winner
+//     $winners = Game::where('round_id', $currentRound)
+//         ->whereNotNull('home_team_score')
+//         ->whereNotNull('away_team_score')
+//         ->where(function ($query) use ($winner_team_id) {
+//             $query->where('home_team_id', $winner_team_id)
+//                   ->orWhere('away_team_id', $winner_team_id);
+//         })
+//         ->pluck('home_team_id', 'away_team_id')
+//         ->toArray();
+
+//     // Remove duplicates and ensure no team is paired with itself
+//     $winners = array_filter(array_unique(array_merge(array_keys($winners), array_values($winners))));
+//     $winners = array_diff($winners, [$winner_team_id]);
+
+//         // Pair the winner
+//         $pairedWinners = array_chunk($winners, 2);
+    
+//         foreach ($pairedWinners as $pair) {
+//             if (count($pair) == 2) {
+//                 Game::create([
+//                     'tournament_id' => $tournament->id,
+//                     'round_id' => $nextRound,
+//                     'home_team_id' => $pair[0],
+//                     'away_team_id' => $pair[1],
+//                     'date' => null,
+//                     'home_team_score' => null,
+//                     'away_team_score' => null,
+//                 ]);
+//             } else {
+
+//             }
+            
+//     }
+// }
 
     /**
      * Show the form for editing the specified resource.

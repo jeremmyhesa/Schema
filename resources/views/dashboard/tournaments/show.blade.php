@@ -76,8 +76,17 @@
           </ul>
           <ul class="button-1">
             @forelse ($games_1 as $game_1 ) 
-            <button type="button" class="play-1 text-white" data-bs-toggle="modal" data-bs-target="#modalGame"><span data-feather="play"></span>
-            </button>
+            <button type="button" class="play-1 text-white" data-bs-toggle="modal" data-bs-target="#modalGame" 
+            data-home="{{ $game_1->homeTeam->name ?? '' }}" 
+            data-away="{{ $game_1->awayTeam->name ?? '' }}" 
+            data-round="{{ $game_1->round_id }}"
+            home-data="{{ $game_1->homeTeam->id ?? '' }}"
+            away-data="{{ $game_1->awayTeam->id ?? '' }}"
+            home-score="{{ $game_1->home_team_score }}"
+            away-score="{{ $game_1->away_team_score }}"
+            game-data="{{ $game_1->id }}">
+        <span data-feather="play"></span>
+    </button>
             @empty
             @for ($i = 0; $i < 16; $i++)
               <a href="#" class="no-play-1"><span data-feather="play"></span></a>
@@ -85,7 +94,6 @@
             @endfor
             @endforelse
           </ul>
-          {{-- @endif --}}
             {{-- # --}}
 
           {{-- Round-2 --}}
@@ -115,8 +123,17 @@
             </ul>
             <ul class="button-2">
               @forelse ($games_2 as $game_2 ) 
-              <button type="button" class="play-2 text-white" data-bs-toggle="modal" data-bs-target="#modalGame2"><span data-feather="play"></span>
-              </button>
+              <button type="button" class="play-2 text-white" data-bs-toggle="modal" data-bs-target="#modalGame" 
+            data-home="{{ $game_2->homeTeam->name ?? '' }}"
+            data-away="{{ $game_2->awayTeam->name ?? '' }}" 
+            data-round="{{ $game_2->round_id }}"
+            home-data="{{ $game_2->homeTeam->id ?? '' }}"
+            away-data="{{ $game_2->awayTeam->id ?? '' }}"
+            home-score="{{ $game_2->home_team_score }}"
+            away-score="{{ $game_2->away_team_score }}"
+            game-data="{{ $game_2->id }}">
+        <span data-feather="play"></span>
+    </button>
               @empty
               @for ($i = 0; $i < 8; $i++)
                 <a href="#" class="no-play-2 text-white"><span data-feather="play"></span></a>
@@ -153,8 +170,17 @@
           </ul>
           <ul class="button-3">
             @forelse ($games_3 as $game_3 ) 
-            <button type="button" class="play-3 text-white" data-bs-toggle="modal" data-bs-target="#modalGame3"><span data-feather="play"></span>
-            </button>
+            <button type="button" class="play-3 text-white" data-bs-toggle="modal" data-bs-target="#modalGame" 
+            data-home="{{ $game_3->homeTeam->name ?? '' }}" 
+            data-away="{{ $game_3->awayTeam->name ?? '' }}" 
+            data-round="{{ $game_3->round_id }}"
+            home-data="{{ $game_3->homeTeam->id ?? '' }}"
+            away-data="{{ $game_3->awayTeam->id ?? '' }}"
+            home-score="{{ $game_3->home_team_score }}"
+            away-score="{{ $game_3->away_team_score }}"
+            game-data="{{ $game_3->id }}">
+        <span data-feather="play"></span>
+    </button>
             @empty
             @for ($i = 0; $i < 4; $i++)
               <a href="#" class="no-play-3 text-white"><span data-feather="play"></span></a>
@@ -186,8 +212,17 @@
           </ul>
           <ul class="button-4">
             @forelse ($games_4 as $game_4 ) 
-            <button type="button" class="play-4 text-white" data-bs-toggle="modal" data-bs-target="#modalGame4"><span data-feather="play"></span>
-            </button>
+            <button type="button" class="play-4 text-white" data-bs-toggle="modal" data-bs-target="#modalGame" 
+            data-home="{{ $game_4->homeTeam->name ?? '' }}" 
+            data-away="{{ $game_4->awayTeam->name ?? '' }}" 
+            data-round="{{ $game_4->round_id }}"
+            home-data="{{ $game_4->homeTeam->id ?? '' }}"
+            away-data="{{ $game_4->awayTeam->id ?? '' }}"
+            home-score="{{ $game_4->home_team_score }}"
+            away-score="{{ $game_4->away_team_score }}"
+            game-data="{{ $game_4->id }}">
+        <span data-feather="play"></span>
+    </button>
             @empty
             @for ($i = 0; $i < 2; $i++)
               <a href="#" class="no-play-4 text-white"><span data-feather="play"></span></a>
@@ -214,8 +249,17 @@
           </ul>
           <ul class="button-5">
             @forelse ($finals as $final ) 
-            <button type="button" class="play-5 text-white" data-bs-toggle="modal" data-bs-target="#modalGame5"><span data-feather="play"></span>
-            </button>
+            <button type="button" class="play-5 text-white" data-bs-toggle="modal" data-bs-target="#modalGame" 
+            data-home="{{ $final->homeTeam->name ?? '' }}" 
+            data-away="{{ $final->awayTeam->name ?? '' }}" 
+            data-round="{{ $final->round_id }}"
+            home-data="{{ $final->homeTeam->id ?? '' }}"
+            away-data="{{ $final->awayTeam->id ?? '' }}"
+            home-score="{{ $final->home_team_score }}"
+            away-score="{{ $final->away_team_score }}"
+            game-data="{{ $final->id }}">
+        <span data-feather="play"></span>
+    </button>
             @empty
             <a href="#" class="no-play-5 text-white"><span data-feather="play"></span></a>
             @endforelse
@@ -225,20 +269,101 @@
           {{-- Winner --}}
           <ul class='round round-6'>
             <div class="winner d-inline-flex p-2"><span class="name">Winner</span></div>
-            <div class="game-6 game-top-6 d-inline-flex p-2"><span class="name">{{ $final->homeTeam->name ?? ''}}</span></div>
-          </ul>
+            @if($winner && $winner->homeTeam)
+                <div class="game-6 game-top-6 d-inline-flex p-2"><span class="name">{{ $winner->homeTeam->name }}</span></div>
+            @else
+                <div class="game-6 game-top-6 d-inline-flex p-2"><span class="name">No winner</span></div>
+            @endif
+        </ul>
       </main>
       </div>
   </div>
-  
+
+
+<!-- Include Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modalGame = document.getElementById('modalGame');
+    const form = modalGame.querySelector('form');
+
+    modalGame.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Button that triggered the modal
+        const gameId = button.getAttribute('game-data');
+        const homeTeam = button.getAttribute('data-home'); // Extract home team name
+        const awayTeam = button.getAttribute('data-away'); // Extract away team name
+        const teamHomeId = button.getAttribute('home-data'); // Home team id
+        const teamAwayId = button.getAttribute('away-data'); // Away team id
+        const roundId = button.getAttribute('data-round'); // Extract round ID
+        const homeScore = button.getAttribute('home-score') || '0';
+        const awayScore = button.getAttribute('away-score') || '0';
+
+        if (!gameId) {
+            console.error('Game ID is missing');
+            return; // Stop execution if gameId is missing
+        }
+
+        // Update the modal's content
+        const modalTitle = modalGame.querySelector('.modal-title');
+        const gameIdInput = modalGame.querySelector('#gameIdInput');
+        const homeTeamLabel = modalGame.querySelector('#homeTeamLabel');
+        const awayTeamLabel = modalGame.querySelector('#awayTeamLabel');
+        const HTIdInput = modalGame.querySelector('#HTIdInput');
+        const ATIdInput = modalGame.querySelector('#ATIdInput'); 
+        const roundIdInput = modalGame.querySelector('#roundIdInput');
+        const homeScoreInput = modalGame.querySelector('#homeTeamScore');
+        const awayScoreInput = modalGame.querySelector('#awayTeamScore');
+        
+        modalTitle.textContent = `Match: ${homeTeam} vs ${awayTeam}`;
+        homeTeamLabel.textContent = `${homeTeam}`;
+        awayTeamLabel.textContent = `${awayTeam}`;
+        gameIdInput.value = gameId;
+        HTIdInput.value = teamHomeId;
+        ATIdInput.value = teamAwayId;
+        roundIdInput.value = roundId;
+
+        // Set Placeholders
+        homeScoreInput.placeholder = homeScore
+        awayScoreInput.placeholder = awayScore
+
+        //Update form action to include game_id
+        const tournamentSlug = '{{ $tournament->slug }}';
+        const formActionUrl = `/dashboard/tournaments/${tournamentSlug}/${gameId}`;
+        form.setAttribute('action', formActionUrl);
+        
+        console.log(`Set round_id input value to: ${roundIdInput.value}`); // Debugging log
+        console.log(`Form action URL set to: ${formActionUrl}`);
+    });
+
+    form.addEventListener('submit', function (event) {
+        // Accessing form inputs to log their values before submission
+        const gameIdInput = modalGame.querySelector('#gameIdInput');
+        const roundIdInput = modalGame.querySelector('#roundIdInput'); // Hidden round_id input
+        const HTIdInput = modalGame.querySelector('#HTIdInput')
+        const ATIdInput = modalGame.querySelector('#ATIdInput')
+        const homeScore = modalGame.querySelector('#homeTeamScore');
+        const awayScore = modalGame.querySelector('#awayTeamScore');
+
+        console.log('Form Values:', {
+            gameId: gameIdInput.value,
+            roundId: roundIdInput.value,
+            teamHomeId: HTIdInput.value,
+            awayTeamId: ATIdInput.value,
+            homeTeamScore: homeScore.value,
+            awayTeamScore: awayScore.value
+        });
+    
+    });
+});
+
+</script>
+
+
   <!-- Modal -->
-  @include('dashboard.tournaments.game-modal', [
-    'games_1' => $games_1,
-    'games_2' => $games_2,
-    'games_3' => $games_3,
-    'games_4' => $games_4,
-    'finals'  => $finals
-])
+  @include('dashboard.tournaments.game-modal')
 {{-- End Modal --}}
   
 @endsection

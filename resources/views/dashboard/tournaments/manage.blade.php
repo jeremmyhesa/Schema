@@ -2,7 +2,7 @@
 
 @section('container')
 
-<div class="row-lg-8">
+<div class="row-lg-8 mb-3">
     <div class="col-lg-6">
 
         <div class="d-flex justify-content flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
