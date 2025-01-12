@@ -17,6 +17,7 @@ class CreateGamesTable extends Migration
             $table->id();
             $table->foreignId('tournament_id');
             $table->foreignId('round_id');
+            $table->bigInteger('match_id')->default('0');
             $table->foreignId('home_team_id')->nullable();
             $table->foreignId('away_team_id')->nullable();
             $table->date('date')->nullable();

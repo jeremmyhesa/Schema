@@ -84,7 +84,8 @@
             away-data="{{ $game_1->awayTeam->id ?? '' }}"
             home-score="{{ $game_1->home_team_score }}"
             away-score="{{ $game_1->away_team_score }}"
-            game-data="{{ $game_1->id }}">
+            game-data="{{ $game_1->id }}"
+            match-data="{{ $game_1->match_id }}">
         <span data-feather="play"></span>
     </button>
             @empty
@@ -131,7 +132,8 @@
             away-data="{{ $game_2->awayTeam->id ?? '' }}"
             home-score="{{ $game_2->home_team_score }}"
             away-score="{{ $game_2->away_team_score }}"
-            game-data="{{ $game_2->id }}">
+            game-data="{{ $game_2->id }}"
+            match-data="{{ $game_2->match_id }}">
         <span data-feather="play"></span>
     </button>
               @empty
@@ -178,7 +180,8 @@
             away-data="{{ $game_3->awayTeam->id ?? '' }}"
             home-score="{{ $game_3->home_team_score }}"
             away-score="{{ $game_3->away_team_score }}"
-            game-data="{{ $game_3->id }}">
+            game-data="{{ $game_3->id }}"
+            match-data="{{ $game_3->match_id }}">
         <span data-feather="play"></span>
     </button>
             @empty
@@ -220,7 +223,8 @@
             away-data="{{ $game_4->awayTeam->id ?? '' }}"
             home-score="{{ $game_4->home_team_score }}"
             away-score="{{ $game_4->away_team_score }}"
-            game-data="{{ $game_4->id }}">
+            game-data="{{ $game_4->id }}"
+            match-data="{{ $game_4->match_id }}">
         <span data-feather="play"></span>
     </button>
             @empty
@@ -257,7 +261,8 @@
             away-data="{{ $final->awayTeam->id ?? '' }}"
             home-score="{{ $final->home_team_score }}"
             away-score="{{ $final->away_team_score }}"
-            game-data="{{ $final->id }}">
+            game-data="{{ $final->id }}"
+            match-data="{{ $final->match_id }}">
         <span data-feather="play"></span>
     </button>
             @empty
@@ -300,10 +305,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const roundId = button.getAttribute('data-round'); // Extract round ID
         const homeScore = button.getAttribute('home-score') || '0';
         const awayScore = button.getAttribute('away-score') || '0';
+        const matchId = button.getAttribute('match-data');
 
         if (!gameId) {
             console.error('Game ID is missing');
             return; // Stop execution if gameId is missing
+        }
+        if (teamHomeId == '' || teamAwayId == '') {
+          alert("Team belum lengkap, match tidak dapat dijalankan.");
+          event.preventDefault();
+          return;
         }
 
         // Update the modal's content
@@ -316,6 +327,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const roundIdInput = modalGame.querySelector('#roundIdInput');
         const homeScoreInput = modalGame.querySelector('#homeTeamScore');
         const awayScoreInput = modalGame.querySelector('#awayTeamScore');
+        const matchIdInput = modalGame.querySelector('#matchIdInput');
         
         modalTitle.textContent = `Match: ${homeTeam} vs ${awayTeam}`;
         homeTeamLabel.textContent = `${homeTeam}`;
@@ -324,6 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
         HTIdInput.value = teamHomeId;
         ATIdInput.value = teamAwayId;
         roundIdInput.value = roundId;
+        matchIdInput.value = matchId;
 
         // Set Placeholders
         homeScoreInput.placeholder = homeScore
@@ -331,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         //Update form action to include game_id
         const tournamentSlug = '{{ $tournament->slug }}';
-        const formActionUrl = `/dashboard/tournaments/${tournamentSlug}/${gameId}`;
+        const formActionUrl = '/dashboard/tournaments/' + tournamentSlug;
         form.setAttribute('action', formActionUrl);
         
         console.log(`Set round_id input value to: ${roundIdInput.value}`); // Debugging log
@@ -339,23 +352,40 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     form.addEventListener('submit', function (event) {
-        // Accessing form inputs to log their values before submission
-        const gameIdInput = modalGame.querySelector('#gameIdInput');
-        const roundIdInput = modalGame.querySelector('#roundIdInput'); // Hidden round_id input
-        const HTIdInput = modalGame.querySelector('#HTIdInput')
-        const ATIdInput = modalGame.querySelector('#ATIdInput')
-        const homeScore = modalGame.querySelector('#homeTeamScore');
-        const awayScore = modalGame.querySelector('#awayTeamScore');
+      event.preventDefault();
 
-        console.log('Form Values:', {
-            gameId: gameIdInput.value,
-            roundId: roundIdInput.value,
-            teamHomeId: HTIdInput.value,
-            awayTeamId: ATIdInput.value,
-            homeTeamScore: homeScore.value,
-            awayTeamScore: awayScore.value
-        });
-    
+      const tournamentSlug = '{{ $tournament->slug }}';
+      const tournamentId = '{{ $tournament->id }}';
+      const gameIdInput = modalGame.querySelector('#gameIdInput');
+      const roundIdInput = modalGame.querySelector('#roundIdInput');
+      const HTIdInput = modalGame.querySelector('#HTIdInput')
+      const ATIdInput = modalGame.querySelector('#ATIdInput')
+      const homeScore = modalGame.querySelector('#homeTeamScore');
+      const awayScore = modalGame.querySelector('#awayTeamScore');
+      const matchIdInput = modalGame.querySelector('#matchIdInput');
+
+      // Confirmation
+      const confirmed = confirm(`Are you sure you want to submit the scores?\n\nHome Team: ${homeScore.value}\nAway Team: ${awayScore.value}`);
+      if (!confirmed) {
+        event.preventDefault();
+        return;
+      } else {
+        if (homeScore.value < 0 || awayScore.value < 0 || homeScore.value == '' || awayScore.value == '') {
+          event.preventDefault();
+          formErrorMessage.textContent = 'Scores must be non-negative integers.';
+          formErrorMessage.classList.remove('d-none');
+          return;
+        }
+
+        if (homeScore.value == awayScore.value) {
+            event.preventDefault();
+            formErrorMessage.textContent = 'Must have one winner.';
+            formErrorMessage.classList.remove('d-none');
+            return;
+        }
+
+        form.submit();
+      }
     });
 });
 

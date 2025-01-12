@@ -78,18 +78,22 @@ class DashboardTournamentController extends Controller
 
         $maxTeams = $tournament->participants;
 
-    if ($currentTeams < $maxTeams) {
-        $validatedData = $request->validate([
-            'name' => 'max:11|required',
-        ]);
+        if ($currentTeams < $maxTeams) {
+            $validatedData = $request->validate([
+                'name' => 'max:11|required',
+            ]);
 
-        $validatedData['tournament_id'] = $tournament->id;
+            $validatedData['tournament_id'] = $tournament->id;
 
-        Team::create($validatedData);
-        return redirect()->route('participants', ['tournament' => $tournament->slug]);
-    } else {
-        return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "Teams Full");
-    }
+            Team::create($validatedData);
+
+            $perPage = 8;
+            $totalItems = Team::where('tournament_id', $tournament->id)->count();
+            $lastPage = ceil($totalItems / $perPage);
+            return redirect()->route('participants', ['tournament' => $tournament->slug, 'page' => $lastPage]);
+        } else {
+            return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "Teams Full");
+        }
     }
 
     public function manage(Tournament $tournament, Team $team)
@@ -116,25 +120,25 @@ class DashboardTournamentController extends Controller
                 return redirect()->route('manage', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
             } 
         }
-        // #
 
         $values = Team::where('tournament_id', $tournament->id)->get();
-        $shuffled = $values->shuffle();
+        $firstTeam = $values->first();
+        $lastTeam = $values->last();
+        $midleTeams = $values->slice(1, -1);
+        $midleTeams = $midleTeams->shuffle();
+        $shuffled = $midleTeams->prepend($firstTeam)->push($lastTeam);
         
         for ($i = 0; $i < $shuffled->count(); $i ++ ) {
             $team_name = $shuffled[$i]->name;
             $tournament_id = $shuffled[$i]->tournament_id;
             $team_id = $values[$i]->id;
 
-        $teams = Team::find($team_id);
-        $teams->tournament_id = $tournament_id;
-        $teams->name = $team_name;
-        $teams->save(); 
-
-
-}
+            $teams = Team::find($team_id);
+            $teams->tournament_id = $tournament_id;
+            $teams->name = $team_name;
+            $teams->save(); 
+        }
         return redirect()->route('manage', ['tournament' => $tournament->slug]);
-
     }
 
     public function save(Tournament $tournament, Team $team, Game $game)
@@ -148,49 +152,40 @@ class DashboardTournamentController extends Controller
         if ($currentTeams < $maxTeams ) {
             return redirect()->route('participants', ['tournament' => $tournament->slug])->with('error', "Must Complete the participants first");
         }
-        // #
-        // Check Existing Game
+
         for ($i = 0; $i < $games->count(); $i ++) {
             $existing_game = Game::find($games[$i]);
             if ($existing_game) {
                 return redirect()->route('tournament', ['tournament' => $tournament->slug])->with('error', "The tournament is underway");
             } 
         }
-        // #
 
-                for ($i = 0; $i < $values->count(); $i += 2) {
-                    $teamHome = $values[$i];
-                    $teamAway = $values[$i + 1] ?? null;
+        $startingRound = 1; //currentTeams = 32
+        if ($currentTeams == 16) $startingRound = 2;
+        if ($currentTeams == 8) $startingRound = 3;
+        $maxMatch = $currentTeams / 2;
+        $countTeam = 0;
+        for ($round = $startingRound; $round <= 6; $round++) {
+            for ($match = 1; $match <= $maxMatch; $match++) {
+                $homeTeam = $values[$countTeam] ?? null;
+                $awayTeam = $values[++$countTeam] ?? null;
 
-                    // Create a new game
-                    $game = new Game();
-                    $game->tournament_id = $tournament->id;
-                    if ($tournament->participants == 32) {
-                        $game->round_id = 1;
-                    }
-                    if ($tournament->participants == 16) {
-                        $game->round_id = 2;
-                    }
-                    if ($tournament->participants == 8) {
-                        $game->round_id = 3;
-                    }
-                    $game->date = null;
-                    $game->home_team_id = $teamHome->id;
-                
-                    if ($teamAway) {
-                        $game->away_team_id = $teamAway->id;
-                    } else {
-                    
-                $game->away_team_id = null;
+                // Create a new game
+                $game = new Game();
+                $game->tournament_id = $tournament->id;
+                $game->round_id = $round;
+                $game->match_id = $match;
+                $game->home_team_id = $homeTeam != null ? $homeTeam->id : null;
+                $game->away_team_id = $awayTeam != null ? $awayTeam->id : null;
+                $game->date = now();
+                $game->save();
+
+                $countTeam++;
             }
-        
-            $game->home_team_score = null;
-            $game->away_team_score = null;
-            $game->save();
-            
+            $maxMatch = round($maxMatch / 2);
         }
+
         return redirect()->route('tournament', ['tournament' => $tournament->slug])->with('success', "Tournament is ready to run");
-            // return redirect()->route('participants', ['tournament' => $tournament->slug]);
 }
 
     
@@ -325,45 +320,49 @@ class DashboardTournamentController extends Controller
     }
 
     // Make Next Round
-    public function nextRound(Request $request, Tournament $tournament, Round $round, Game $game)
+    public function nextRound(Request $request)
     {
-    // Dump incoming request data
-    // dd($request->all());
+        // Determine winner
+        $tournamentId = $request['tournament_id'];
+        $roundId = $request['round_id'];
+        $homeTeamId = $request['home_team_id'];
+        $awayTeamId = $request['away_team_id'];
+        $gameId = $request['game_id'];
+        $matchId = $request['match_id'];
+        $homeTeamScore = $request['home_team_score'];
+        $awayTeamScore = $request['away_team_score'];
 
-    // Validation rules
-    $rules = [
-        'round_id' => 'required|integer|exists:rounds,id',
-        'tournament_id' => 'required|integer|exists:tournaments,id',
-        'home_team_id' => 'required|integer|exists:teams,id',
-        'away_team_id' => 'required|integer|exists:teams,id',
-        'home_team_score' => 'required|integer|min:0',
-        'away_team_score' => 'required|integer|min:0'
-    ];
-    $validatedData = $request->validate($rules);
+        $winnerId = $homeTeamScore > $awayTeamScore ? $homeTeamId : $awayTeamId;
+        Game::where('id', $gameId)
+        ->update([
+            'home_team_score' => $homeTeamScore,
+            'away_team_score' => $awayTeamScore,
+            'winner_id' => $winnerId,
+            'updated_at' => now()
+        ]);
 
-    // Determine winner
-    $winner_id = null;
-    if ($validatedData['home_team_score'] > $validatedData['away_team_score']) {
-        $winner_id = $validatedData['home_team_id'];
-    } elseif ($validatedData['away_team_score'] > $validatedData['home_team_score']) {
-        $winner_id = $validatedData['away_team_id'];
+        $nextMatchId = 0;
+        $homeTeamId = null;
+        $awayTeamId = null;
+        if ($matchId % 2 != 0) {
+            $nextMatchId = round($matchId / 2);
+            $homeTeamId = $winnerId;
+        } else {
+            $nextMatchId = $matchId / 2;
+            $awayTeamId = $winnerId;
+        }
+        $dataToUpdate = ['updated_at' => now()];
+        if ($homeTeamId != null) $dataToUpdate['home_team_id'] = $homeTeamId;
+        if ($awayTeamId != null) $dataToUpdate['away_team_id'] = $awayTeamId;
+        Game::where([
+            ['tournament_id', '=', $tournamentId],
+            ['round_id', '=', ++$roundId],
+            ['match_id', '=', $nextMatchId]
+        ])
+        ->update($dataToUpdate);
+
+        return redirect()->route('tournament', $request['tournament_slug']);
     }
-
-    // Log the winner id
-    Log::info('Winner ID: ' .$winner_id);
-
-
-    dd($winner_id);
-
-    $validatedData['winner_id'] = $winner_id;
-
-    Game::where('id', $game->id)
-                ->update($validatedData);
-
-    return redirect()->route('tournament.show', $tournament->id);
-
-
-}
 
             
             

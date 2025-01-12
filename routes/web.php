@@ -82,7 +82,7 @@ Route::resource('/dashboard/tournaments', DashboardTournamentController::class )
 ->middleware('auth');
 Route::get('dashboard/tournaments/{tournament:slug}', [DashboardTournamentController::class, 'show'])->name('tournament');
 // Make Next Round
-Route::post('dashboard/tournaments/{tournament:slug}/{game:id}', [DashboardTournamentController::class, 'nextRound'])->name('tournament.nextRound');
+Route::post('dashboard/tournaments/{tournament:slug}', [DashboardTournamentController::class, 'nextRound']);
 
 
 // Admin
